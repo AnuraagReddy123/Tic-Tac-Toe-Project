@@ -9,7 +9,12 @@ def available_actions(markers:list):
 
     return positions
 
-def choose_action(markers:list):
+def choose_action(markers:list, policy=True):
     actions = available_actions(markers)
     # Choose a random action
-    return actions[np.random.randint(0, len(actions))]
+    if policy == False:
+        return actions[np.random.randint(0, len(actions))]
+
+    # Follow the policy select first action
+    else:
+        return actions[0]
