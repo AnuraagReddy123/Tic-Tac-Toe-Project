@@ -1,6 +1,9 @@
 #import modules
 import pygame
-from pygame.locals import *
+import pygame.locals as pl
+import time
+
+import reinforcement_learning as rl
 
 pygame.init()
 
@@ -27,7 +30,7 @@ game_over = False
 winner = 0
 
 #setup a rectangle for "Play Again" Option
-again_rect = Rect(screen_width // 2 - 80, screen_height // 2, 160, 50)
+again_rect = pl.Rect(screen_width // 2 - 80, screen_height // 2, 160, 50)
 
 #create empty 3 x 3 list to represent the grid
 for x in range (3):
@@ -64,14 +67,14 @@ def check_game_over():
 
     x_pos = 0
     for x in markers:
-        #check columns
+        #check rows
         if sum(x) == 3:
             winner = 1
             game_over = True
         if sum(x) == -3:
             winner = 2
             game_over = True
-        #check rows
+        #check columns
         if markers[0][x_pos] + markers [1][x_pos] + markers [2][x_pos] == 3:
             winner = 1
             game_over = True
@@ -132,20 +135,29 @@ while run:
         #handle game exit
         if event.type == pygame.QUIT:
             run = False
+        
         #run new game
         if game_over == False:
             #check for mouseclick
-            if event.type == pygame.MOUSEBUTTONDOWN and clicked == False:
-                clicked = True
-            if event.type == pygame.MOUSEBUTTONUP and clicked == True:
-                clicked = False
-                pos = pygame.mouse.get_pos()
-                cell_x = pos[0] // 100
-                cell_y = pos[1] // 100
-                if markers[cell_x][cell_y] == 0:
-                    markers[cell_x][cell_y] = player
-                    player *= -1
-                    check_game_over()
+            if player == 1:
+                if event.type == pygame.MOUSEBUTTONDOWN and clicked == False:
+                    clicked = True
+                if event.type == pygame.MOUSEBUTTONUP and clicked == True:
+                    clicked = False
+                    pos = pygame.mouse.get_pos()
+                    cell_x = pos[0] // 100
+                    cell_y = pos[1] // 100
+                    if markers[cell_x][cell_y] == 0:
+                        markers[cell_x][cell_y] = player
+                        player *= -1
+                        check_game_over()
+
+            #AI move
+            elif player == -1:
+                cell_x, cell_y = rl.choose_action(markers)
+                markers[cell_x][cell_y] = player
+                player *= -1
+                check_game_over()
 
     #check if game has been won
     if game_over == True:
