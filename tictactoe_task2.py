@@ -4,11 +4,12 @@ import pygame.locals as pl
 import time
 
 import reinforcement_learning as rl
+import Constants as C
 
 pygame.init()
 
-screen_height = 300
-screen_width = 300
+screen_height = 100 * C.BOARD_DIM
+screen_width = 100 * C.BOARD_DIM
 line_width = 6
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Tic Tac Toe')
@@ -33,8 +34,8 @@ winner = 0
 again_rect = pl.Rect(screen_width // 2 - 80, screen_height // 2, 160, 50)
 
 #create empty 3 x 3 list to represent the grid
-for x in range (3):
-    row = [0] * 3
+for x in range (C.BOARD_DIM):
+    row = [0] * C.BOARD_DIM
     markers.append(row)
 
 
@@ -43,7 +44,7 @@ def draw_board():
     bg = (255, 255, 210)
     grid = (50, 50, 50)
     screen.fill(bg)
-    for x in range(1,3):
+    for x in range(1,C.BOARD_DIM):
         pygame.draw.line(screen, grid, (0, 100 * x), (screen_width,100 * x), line_width)
         pygame.draw.line(screen, grid, (100 * x, 0), (100 * x, screen_height), line_width)
 
@@ -67,30 +68,46 @@ def check_game_over():
 
     x_pos = 0
     for x in markers:
-        #check rows
-        if sum(x) == 3:
+        #check columns
+        if sum(x) == C.BOARD_DIM:
             winner = 1
             game_over = True
-        if sum(x) == -3:
+        if sum(x) == -C.BOARD_DIM:
             winner = 2
             game_over = True
-        #check columns
-        if markers[0][x_pos] + markers [1][x_pos] + markers [2][x_pos] == 3:
+        #check rows
+        sum_check = 0
+        for y in markers:
+            sum_check += y[x_pos]
+        if sum_check == C.BOARD_DIM:
             winner = 1
             game_over = True
-        if markers[0][x_pos] + markers [1][x_pos] + markers [2][x_pos] == -3:
+        if sum_check == -C.BOARD_DIM:
             winner = 2
             game_over = True
         x_pos += 1
 
     #check cross
-    if markers[0][0] + markers[1][1] + markers [2][2] == 3 or markers[2][0] + markers[1][1] + markers [0][2] == 3:
+    sum_check = 0
+    for x in range(C.BOARD_DIM):
+        sum_check += markers[x][x]
+    if sum_check == C.BOARD_DIM:
         winner = 1
         game_over = True
-    if markers[0][0] + markers[1][1] + markers [2][2] == -3 or markers[2][0] + markers[1][1] + markers [0][2] == -3:
+    if sum_check == -C.BOARD_DIM:
         winner = 2
         game_over = True
-
+    
+    sum_check = 0
+    for x, y in zip(range(C.BOARD_DIM), reversed(range(C.BOARD_DIM))):
+        sum_check += markers[x][y]
+    if sum_check == C.BOARD_DIM:
+        winner = 1
+        game_over = True
+    if sum_check == -C.BOARD_DIM:
+        winner = 2
+        game_over = True
+        
     #check for tie
     if game_over == False:
         tie = True
@@ -169,8 +186,8 @@ while run:
                 markers = []
                 winner = 0
                 #create empty 3 x 3 list to represent the grid
-                for x in range (3):
-                    row = [0] * 3
+                for x in range (C.BOARD_DIM):
+                    row = [0] * C.BOARD_DIM
                     markers.append(row)
 
     #update display

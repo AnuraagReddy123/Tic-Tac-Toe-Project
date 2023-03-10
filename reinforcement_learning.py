@@ -1,9 +1,10 @@
 import numpy as np
+import Constants as C
 
 def available_actions(markers:list):
     positions = []
-    for x in range(3):
-        for y in range(3):
+    for x in range(C.BOARD_DIM):
+        for y in range(C.BOARD_DIM):
             if markers[x][y] == 0:
                 positions.append([x,y])
 
