@@ -157,15 +157,13 @@ while run:
         if game_over == False:
             #check for mouseclick
             if player == 1:
-                cell_x, cell_y = rl.choose_action(markers, policy=True)
-                markers[cell_x][cell_y] = player
+                markers = rl.choose_action(markers, policy=True)
                 player *= -1
                 check_game_over()
                 pygame.event.post(pygame.event.Event(pygame.MOUSEMOTION))
             
             elif player == -1:
-                cell_x, cell_y = rl.choose_action(markers, policy=False)
-                markers[cell_x][cell_y] = player
+                markers = rl.choose_action(markers, policy=False)
                 player *= -1
                 check_game_over()
 

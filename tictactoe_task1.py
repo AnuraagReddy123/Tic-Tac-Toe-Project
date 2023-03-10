@@ -138,7 +138,7 @@ while run:
         
         #run new game
         if game_over == False:
-            #check for mouseclick
+            # Player move
             if player == 1:
                 if event.type == pygame.MOUSEBUTTONDOWN and clicked == False:
                     clicked = True
@@ -155,8 +155,7 @@ while run:
 
             #AI move
             elif player == -1:
-                cell_x, cell_y = rl.choose_action(markers)
-                markers[cell_x][cell_y] = player
+                markers = rl.choose_action(markers, policy=False)
                 player *= -1
                 check_game_over()
 
