@@ -1,6 +1,6 @@
 import numpy as np
 import Constants as C
-
+import utils
 
 
 # State representation = C.BOARD_DIM x C.BOARD_DIM matrix
@@ -23,12 +23,28 @@ for i in range(3**(C.BOARD_DIM * C.BOARD_DIM)):
     if np.count_nonzero(temp == 1) != np.count_nonzero(temp == -1) and np.count_nonzero(temp == 1) != np.count_nonzero(temp == -1) + 1:
         continue
 
+    # If X wins but # of 1s == # of -1s, skip it
+    if utils.check_if_wins(temp.reshape(C.BOARD_DIM, C.BOARD_DIM), 1) and np.count_nonzero(temp == 1) == np.count_nonzero(temp == -1):
+        continue
+
+    # If O wins but # of 1s == # of -1s + 1, skip it
+    if utils.check_if_wins(temp.reshape(C.BOARD_DIM, C.BOARD_DIM), -1) and np.count_nonzero(temp == 1) == np.count_nonzero(temp == -1) + 1:
+        continue
+
+    # If # of Xs == # of Os + 1
+    if np.count_nonzero(temp == 1) == np.count_nonzero(temp == -1) + 1:
+        # If not X win and not draw, skip it
+        if not utils.check_if_wins(temp.reshape(C.BOARD_DIM, C.BOARD_DIM), 1) and not utils.check_draw(temp.reshape(C.BOARD_DIM, C.BOARD_DIM)):
+            continue
+
     temp = temp.reshape(C.BOARD_DIM, C.BOARD_DIM)
     states.append(temp)
     state_to_index[tuple(temp.flatten())] = cnt
     index_to_state[cnt] = temp
     cnt += 1
 
+
+print(len(states))
 
 # Get all absorbing states (states where game is over)
 for state in states:
@@ -123,3 +139,4 @@ def choose_action(markers:list, policy=True):
         # Argmax of probability transition matrix
         next_state_index = np.argmax(probability_transition_matrix[state_index])
         return index_to_state[next_state_index]
+    
