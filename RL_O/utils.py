@@ -40,3 +40,12 @@ def check_draw(markers):
             if i == 0:
                 return False
     return True
+
+def available_actions(markers:list):
+    positions = []
+    for x in range(C.BOARD_DIM):
+        for y in range(C.BOARD_DIM):
+            if markers[x][y] == 0:
+                positions.append([x,y])
+
+    return positions
