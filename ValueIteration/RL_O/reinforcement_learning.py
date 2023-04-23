@@ -1,3 +1,6 @@
+import sys
+sys.path.append('../..')
+
 import numpy as np
 import Constants as C
 import utils
@@ -114,13 +117,13 @@ value_function = np.zeros(len(states))
 policy = np.zeros(len(states))
 
 # Discount factor
-gamma = 0.9
+gamma = C.GAMMA
 
 # Number of iterations
-num_iterations = 10
+num_iterations = C.NUM_ITERATIONS
 
 # Epsilon
-epsilon = 0.0001
+epsilon = C.EPSILON
 
 # Run value iteration
 for i in range(num_iterations):

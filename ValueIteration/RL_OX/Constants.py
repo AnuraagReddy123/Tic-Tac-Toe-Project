@@ -1,1 +1,0 @@
-BOARD_DIM = 3

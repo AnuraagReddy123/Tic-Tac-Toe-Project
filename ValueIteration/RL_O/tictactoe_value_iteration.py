@@ -1,4 +1,8 @@
 #import modules
+import sys
+sys.path.append('..')
+sys.path.append('../..')
+
 import pygame
 import pygame.locals as pl
 import time
